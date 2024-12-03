@@ -1,9 +1,8 @@
 const message = "Hello";
 const place  = "World";
-//git config --global user.name "focus011147"
+//git config 
 // logging out a string
-console.log('Hello,Word!') // git config --global user.email "k.focus321@gmail.com"
-
+console.log('Hello,Word!') 
 // using substitutions
 console.log('hello, %s!',place);
 

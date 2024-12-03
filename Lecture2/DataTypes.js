@@ -1,5 +1,5 @@
 const people = ["Aaron","Mel","John"];
-const   one = 1;
+const one = 1;
 const str = "Hello World";
 const b = true;
 const employee = {
@@ -8,7 +8,7 @@ const employee = {
 };
 
 function sayHello(person) {
-    console.log("Hello"+person.frstName);
+    console.log("Hello"+person.firstName);
 }
 
 console.log(typeof people);
