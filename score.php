@@ -1,74 +1,76 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>score</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade Calculate</title>
     <style>
-        table {
-            border-collapse: collapse;
-            width: 600px;
-            margin: auto;
-        }
-        th, td {
-            padding: 10px;
-            text-align: center;
-        }
+       
+
+      
     </style>
 </head>
 <body>
-    <h1 style="text-align:center;">ผลลัพธ์จากการคำนวณเกรด</h1>
-    <table>
-        <tr>
-            <th>นักศึกษา</th>
-            <th>ทดสอบย่อย</th>
-            <th>สอบกลางภาค</th>
-            <th>สอบปลายภาค</th>
-            <th>รวม 100 คะแนน</th>
-            <th>เกรด</th>
-        </tr>
+    <center>
+        <h1>ผลลัพธ์จากการคำนวณเกรด</h1>
+
         <?php
-        // อ่านข้อมูลจากไฟล์ score.txt
-        $filename = "score.txt";
-        if (file_exists($filename)) {
-            $file = fopen($filename, "r");
-            while (($line = fgets($file)) !== false) {
-                // แยกข้อมูลด้วยเครื่องหมายคอมมา
-                $data = explode(",", trim($line));
-                $student = $data[0];
-                $hw = (int)$data[1];
-                $midterm = (int)$data[2];
-                $final = (int)$data[3];
+        if (isset($_POST['submit'])) {
+            $filename = $_POST['filename']; // รับชื่อไฟล์จากฟอร์ม
+            if (file_exists($filename)) {
+                $text = file($filename); // อ่านไฟล์
 
-                // คำนวณคะแนนรวม
-                $total = $hw + $midterm + $final;
+                // สร้างตาราง
+                echo '<table border="1" style="width: 80%; margin: 20px auto; text-align: center;">';
+                echo '<tr><th>นักศึกษา</th><th>ทดสอบย่อย</th><th>สอบกลางภาค</th><th>สอบปลายภาค</th><th>รวม 100 คะแนน</th><th>เกรด</th></tr>';
+                foreach ($text as $line) {
+                    $data = explode(",", $line); // แยกข้อมูลจากคอมม่า
+                    if (count($data) == 4) {
+                        $name = trim($data[0]);
+                        $quiz = trim($data[1]);
+                        $midterm = trim($data[2]);
+                        $final = trim($data[3]);
 
-                // คำนวณเกรด
-                if ($total >= 80) {
-                    $grade = 'A';
-                } elseif ($total >= 70) {
-                    $grade = 'B';
-                } elseif ($total >= 60) {
-                    $grade = 'C';
-                } elseif ($total >= 50) {
-                    $grade = 'D';
-                } else {
-                    $grade = 'F';
+                        // คำนวณคะแนนรวม
+                        $total_score = $quiz + $midterm + $final;
+
+                        // คำนวณเกรด
+                        if ($total_score >= 80) {
+                            $grade = 'A';
+                        } elseif ($total_score >= 65) {
+                            $grade = 'B';
+                        } elseif ($total_score >= 50) {
+                            $grade = 'C';
+                        } elseif ($total_score >= 35) {
+                            $grade = 'D';
+                        } else {
+                            $grade = 'F';
+                        }
+
+                        // แสดงข้อมูลในตาราง
+                        echo "<tr>
+                                <td>$name</td>
+                                <td>$quiz</td>
+                                <td>$midterm</td>
+                                <td>$final</td>
+                                <td>$total_score</td>
+                                <td>$grade</td>
+                              </tr>";
+                    }
                 }
 
-                // แสดงข้อมูลในตาราง
-                echo "<tr>
-                        <td>$student</td>
-                        <td>$hw</td>
-                        <td>$midterm</td>
-                        <td>$final</td>
-                        <td>$total</td>
-                        <td>$grade</td>
-                    </tr>";
+                echo '</table>'; // ปิดตาราง
+            } else {
+                echo '<p>ไฟล์ไม่พบหรือไม่สามารถอ่านได้</p>';
             }
-            fclose($file);
         } else {
-            echo "<tr><td colspan='6' style='color:red;'>ไม่พบไฟล์ $filename</td></tr>";
-        }
         ?>
-    </table>
+            <!-- ฟอร์มกรอกชื่อไฟล์ -->
+            <form method="post">
+                <input type="text" name="filename" placeholder=" " required>
+                <input type="submit" name="submit" value="SUBMIT">
+            </form>
+        <?php } ?>
+    </center>
 </body>
 </html>
